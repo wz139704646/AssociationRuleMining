@@ -1,4 +1,4 @@
-from typing import runtime_checkable
+from fp_growth import fp_growth
 import preprocess as prep
 from apriori import apriori
 import argparse
@@ -43,27 +43,30 @@ def main():
     st = time.time()
     if args.algo == 'apriori':
         # run apriori
-        rules = apriori(db, args.min_sup, args.min_conf, args.ignore_single)
+        rules, freq_itemsets = apriori(db, args.min_sup, args.min_conf, args.ignore_single)
     else:
-        # TODO: run FP-growth
-        rules = []
+        # run FP-growth
+        rules, freq_itemsets = fp_growth(db, args.min_sup, args.min_conf, args.ignore_single)
         pass
     et = time.time()
     summary[args.algo+' time elapsed'] = et-st
+    summary[args.algo+' generated frequent itemsets number'] = len(freq_itemsets)
 
     st = time.time()
-    baseline = apriori(db, args.min_sup, args.min_conf, args.ignore_single, prune=False)
+    baseline_rules, baseline_freq_itemsets = apriori(
+        db, args.min_sup, args.min_conf, args.ignore_single, prune=False)
     et = time.time()
     summary['baseline time elapsed'] = et-st
+    summary['baseline generated frequent itemsets number'] = len(baseline_freq_itemsets)
 
     # show rules
-    print('========== {} generate rules ==========')
+    print('========== {} generate rules =========='.format(args.algo))
     for r in rules:
         if not args.allow_empty and len(r.B) == 0:
             continue
         print(r)
     print('========== baseline generate rules ==========')
-    for r in baseline:
+    for r in baseline_rules:
         if not args.allow_empty and len(r.B) == 0:
             continue
         print(r)

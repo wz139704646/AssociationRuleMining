@@ -1,6 +1,6 @@
 from collections import Counter
-from utils import binsearch_right, gen_subsets
-from association_rule import Rule
+import utils
+from association_rule import gen_rules
 
 
 def apriori(db, min_sup, min_conf, ignore_single=False, prune=True):
@@ -18,33 +18,21 @@ def apriori(db, min_sup, min_conf, ignore_single=False, prune=True):
 
     # generate rules
     rules = []
+    freq_itemsets = []
     s = 1 if ignore_single else 0
     for k in range(s, len(Lsets)):
         for (itemset, freq) in Lsets[k]:
+            freq_itemsets.append(itemset)
             rules += gen_rules(
                 itemset, freq, freq_cnt, min_conf, tot_tra)
 
-    return rules
-
-
-def gen_rules(freq_itemset, supp, freq_map, min_conf, tot_base):
-    """generate association rules"""
-    rules = []
-    subs = gen_subsets(freq_itemset, nonempty=True)
-    for s in subs:
-        freq = freq_map[frozenset(s)]
-        conf = float(supp) / freq
-        if conf > min_conf:
-            rules.append(Rule(
-                s, freq_itemset-s, float(freq)/tot_base, conf))
-
-    return rules
+    return rules, freq_itemsets
 
 
 def gen_freq_itemsets(db, sup_cnt, prune=True):
     """generate freq itemsets"""
     # get frequent 1-itemset
-    items = get_freq_items(db, sup_cnt)
+    items = utils.get_freq_items(db, sup_cnt)
     items = [(frozenset([item[0]]), item[1]) for item in items]
 
     cur_Lset = set([item[0] for item in items])
@@ -56,11 +44,11 @@ def gen_freq_itemsets(db, sup_cnt, prune=True):
         k += 1
 
         # scan db for counting
-        cand_counter = count_freq(db, cands)
+        cand_counter = utils.count_freq(db, cands)
 
         # filtering candidates
         cands = cand_counter.most_common()
-        del_p = binsearch_right(
+        del_p = utils.binsearch_right(
             cands, ('', sup_cnt),
             lambda x,y: 1 if x[1]>y[1] else 0 if x[1]==y[1] else -1)
         items = cands[:del_p]
@@ -71,34 +59,6 @@ def gen_freq_itemsets(db, sup_cnt, prune=True):
         #         cur_Lset.add(c)
 
     return Lsets
-
-
-def count_freq(db, itemsets):
-    """count the frequency for each itemset in itemsets"""
-    sets_cnt = Counter()
-    for t in db:
-        st = frozenset(t)
-        for itset in itemsets:
-            if itset.issubset(st):
-                sets_cnt[itset] += 1
-
-    return sets_cnt
-
-
-def get_freq_items(db, sup_cnt):
-    """find frequent items"""
-    item_counter = Counter()
-    for tra in db:
-        item_counter += Counter(tra)
-
-    # items with freq
-    items = item_counter.most_common()
-    # delete infrequent items
-    del_p = binsearch_right(
-        items, ('', sup_cnt),
-        lambda x,y: 1 if x[1]>y[1] else 0 if x[1]==y[1] else -1)
-
-    return items[:del_p]
 
 
 def gen_cand(freq_itemset, k, prune=True):
@@ -131,16 +91,9 @@ if __name__ == "__main__":
         preprocess.read_csv(
             './dataset/GroceryStore/Groceries.csv'))[:1000]
 
-    # test get_freq_items
-    print("========== Test get_freq_items ==========")
-    items = get_freq_items(tras, 100)
-    print(len(items))
-    for item in items:
-        print(item)
-    print("========== Test get_freq_items finished ==========")
-
     # test gen_cand
     print("========== Test gen_cand ==========")
+    items = utils.get_freq_items(tras, 100)
     l1 = set([frozenset({item[0]}) for item in items])
     c2 = gen_cand(l1, 2)
     print(len(c2))
@@ -157,7 +110,11 @@ if __name__ == "__main__":
 
     # test apriori
     print("========== Test apriori==========")
-    rules = apriori(tras, 0.01, 0.5)
+    rules, freq_itemsets = apriori(tras, 0.01, 0.5)
+    print("itemsets {}".format(len(freq_itemsets)))
+    for itemset in freq_itemsets:
+        print(itemset)
+    print("rules {}".format(len(rules)))
     for r in rules:
         if len(r.B) != 0:
             print(r)
