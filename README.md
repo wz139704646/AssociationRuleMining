@@ -44,6 +44,9 @@ baseline time elapsed: 5.81139349937439
 baseline generated frequent itemsets number: 341
 ```
 
+FP-growth:
+
+
 ```cmd
 $ python main.py --algo fp-growth
 
