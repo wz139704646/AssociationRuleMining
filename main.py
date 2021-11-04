@@ -24,6 +24,8 @@ def parse_args():
                         help='the minimal support level to satisfy')
     parser.add_argument('--min-conf', type=float, default=0.5,
                         help='the minimal confidence to satisfy')
+    parser.add_argument('-n', type=int, default=5,
+                        help='run the experiment for n times and get summary by their mean')
 
     return parser.parse_args()
 
@@ -43,20 +45,22 @@ def main():
     st = time.time()
     if args.algo == 'apriori':
         # run apriori
-        rules, freq_itemsets = apriori(db, args.min_sup, args.min_conf, args.ignore_single)
+        for _ in range(args.n):
+            rules, freq_itemsets = apriori(db, args.min_sup, args.min_conf, args.ignore_single)
     else:
         # run FP-growth
-        rules, freq_itemsets = fp_growth(db, args.min_sup, args.min_conf, args.ignore_single)
-        pass
+        for _ in range(args.n):
+            rules, freq_itemsets = fp_growth(db, args.min_sup, args.min_conf, args.ignore_single)
     et = time.time()
-    summary[args.algo+' time elapsed'] = et-st
+    summary[args.algo+' time elapsed ({} times mean)'.format(args.n)] = (et-st) / args.n
     summary[args.algo+' generated frequent itemsets number'] = len(freq_itemsets)
 
     st = time.time()
-    baseline_rules, baseline_freq_itemsets = apriori(
-        db, args.min_sup, args.min_conf, args.ignore_single, prune=False)
+    for _ in range(args.n):
+        baseline_rules, baseline_freq_itemsets = apriori(
+            db, args.min_sup, args.min_conf, args.ignore_single, prune=False)
     et = time.time()
-    summary['baseline time elapsed'] = et-st
+    summary['baseline time elapsed ({} times mean)'.format(args.n)] = (et-st) / args.n
     summary['baseline generated frequent itemsets number'] = len(baseline_freq_itemsets)
 
     # show rules

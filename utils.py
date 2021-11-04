@@ -40,14 +40,12 @@ def get_freq_items(db, sup_cnt, db_freq=1):
                 tra_cnt[item] = db_freq
         item_counter += tra_cnt
 
-    # items with freq
-    items = item_counter.most_common()
-    # delete infrequent items
-    del_p = binsearch_right(
-        items, ('', sup_cnt),
-        lambda x,y: 1 if x[1]>y[1] else 0 if x[1]==y[1] else -1)
+    keys = list(item_counter.keys())
+    for key in keys:
+        if item_counter[key] < sup_cnt:
+            del item_counter[key]
 
-    return items[:del_p]
+    return item_counter
 
 
 def count_freq(db, itemsets):
@@ -92,7 +90,7 @@ if __name__ == "__main__":
 
     # test get_freq_items
     print("========== Test get_freq_items ==========")
-    items = get_freq_items(tras, 100)
+    items = get_freq_items(tras, 100).most_common()
     print(len(items))
     for item in items:
         print(item)

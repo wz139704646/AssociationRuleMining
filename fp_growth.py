@@ -105,7 +105,7 @@ class FPTree:
         """construct the FP tree"""
         # build header table
         items_freq = utils.get_freq_items(db, self.sup_cnt, db_freq)
-        self.header_table = FPHeaderTable(items_freq)
+        self.header_table = FPHeaderTable(items_freq.most_common())
 
         # build the tree
         for i in range(len(db)):

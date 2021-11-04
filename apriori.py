@@ -33,7 +33,7 @@ def gen_freq_itemsets(db, sup_cnt, prune=True):
     """generate freq itemsets"""
     # get frequent 1-itemset
     items = utils.get_freq_items(db, sup_cnt)
-    items = [(frozenset([item[0]]), item[1]) for item in items]
+    items = [(frozenset([item[0]]), item[1]) for item in items.items()]
 
     cur_Lset = set([item[0] for item in items])
     Lsets = []
@@ -47,16 +47,13 @@ def gen_freq_itemsets(db, sup_cnt, prune=True):
         cand_counter = utils.count_freq(db, cands)
 
         # filtering candidates
-        cands = cand_counter.most_common()
-        del_p = utils.binsearch_right(
-            cands, ('', sup_cnt),
-            lambda x,y: 1 if x[1]>y[1] else 0 if x[1]==y[1] else -1)
-        items = cands[:del_p]
+        keys = list(cand_counter.keys())
+        for key in keys:
+            if cand_counter[key] < sup_cnt:
+                del cand_counter[key]
+
+        items = list(cand_counter.items())
         cur_Lset = set([item[0] for item in items])
-        # cur_Lset = set()
-        # for c in cand_counter.keys():
-        #     if cand_counter[c] >= sup_cnt:
-        #         cur_Lset.add(c)
 
     return Lsets
 
@@ -94,7 +91,7 @@ if __name__ == "__main__":
     # test gen_cand
     print("========== Test gen_cand ==========")
     items = utils.get_freq_items(tras, 100)
-    l1 = set([frozenset({item[0]}) for item in items])
+    l1 = set([frozenset([key]) for key in items.keys()])
     c2 = gen_cand(l1, 2)
     print(len(c2))
     for c in c2:
@@ -102,11 +99,11 @@ if __name__ == "__main__":
     print("========== Test gen_cand finished ==========")
 
     # test gen_freq_items
-    print("========== Test gen_cand ==========")
+    print("========== Test gen_freq_itemsets ==========")
     Lsets = gen_freq_itemsets(tras, 20)
     print(len(Lsets))
     print(Lsets[-1])
-    print("========== Test gen_cand finished ==========")
+    print("========== Test gen_freq_itemsets finished ==========")
 
     # test apriori
     print("========== Test apriori==========")

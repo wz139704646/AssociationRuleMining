@@ -13,11 +13,13 @@ def read_csv(filepath, keep_header=False):
         return raw
 
 
-def process_groceries(raw_data):
+def process_groceries(raw_data, no_repeat=True):
     transactions = [
         [
             item.strip() for item in r[1].strip(' {}').split(',')
         ] for r in raw_data]
+    if no_repeat:
+        transactions = [list(set(t)) for t in transactions]
 
     return transactions
 
@@ -91,7 +93,11 @@ def read_sessions(filepath):
 #     return sessions
 
 
-def process_sessions(raw_data, cmd_only=False):
+def is_cmd(tok):
+    return len(tok) > 0 and tok[0] != '-' and re.search('[a-zA-Z]', tok) is not None
+
+
+def process_sessions(raw_data, cmd_only=False, no_repeat=True):
     sessions = []
     sess = []
     for r in raw_data:
@@ -103,7 +109,9 @@ def process_sessions(raw_data, cmd_only=False):
             if len(sess) != 0:
                 sessions.append(sess)
         else:
-            if cmd_only and not r[0].isalpha():
+            if cmd_only and not is_cmd(r):
+                continue
+            if no_repeat and r in sess:
                 continue
             sess.append(r)
 
@@ -117,7 +125,7 @@ if __name__ == '__main__':
     print(len(gro_raw))
     # for r in gro_raw:
     #     print(r)
-    print(gro_raw[:2])
+    print(gro_raw[:5])
     print('========== read csv test finish ==========')
 
     # test process groceries
@@ -126,19 +134,25 @@ if __name__ == '__main__':
     print(len(tra))
     # for t in tra:
     #     print(t)
-    print(tra[:2])
+    print(tra[:5])
     print("========== process groceries finish ==========")
 
     # test read all lines
+    print('========== read sessions start ==========')
     sess_raw = read_sessions('./dataset/UNIX_usage/USER0/sanitized_all.981115184025')
     print(len(sess_raw))
     # for r in sess_raw:
     #     print(r)
-    print(sess_raw[:2])
+    print(sess_raw[:5])
+    print('========== read sessions finish ==========')
 
     # test process sessions
+    print('========== process sessions start ==========')
     sess = process_sessions(sess_raw, True)
-    for s in sess:
-        print(s)
+    print(len(sess))
+    # for s in sess:
+    #     print(s)
+    print(sess[:5])
+    print('========== process sessions finish ==========')
 
 
