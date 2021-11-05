@@ -7,7 +7,7 @@ def apriori(db, min_sup, min_conf, ignore_single=False, prune=True):
     """apriori algorithm"""
     # generate frequent itemsets
     tot_tra = len(db)
-    sup_cnt = int(min_sup * tot_tra)
+    sup_cnt = min_sup * tot_tra
     Lsets = gen_freq_itemsets(db, sup_cnt, prune)
     freq_cnt = Counter()
 

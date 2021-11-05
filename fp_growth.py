@@ -169,7 +169,7 @@ def fp_growth(db, min_sup, min_conf, ignore_single=False):
     """FP growth algorithm"""
     # get frequent itemsets
     tot_base = len(db)
-    sup_cnt = int(tot_base * min_sup)
+    sup_cnt = tot_base * min_sup
     fptree = FPTree(db, [1] * tot_base, sup_cnt)
     freq_itemsets = fptree.mine_freq_itemsets()
 

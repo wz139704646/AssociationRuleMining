@@ -39,7 +39,7 @@ def main():
             prep.read_csv(args.dataset_file))
     else:
         db = prep.process_sessions(
-            prep.read_sessions(args.dataset_file))
+            prep.read_sessions(args.dataset_file), cmd_only=True)
 
     summary = {}
     st = time.time()
@@ -83,3 +83,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    time.sleep(2)
