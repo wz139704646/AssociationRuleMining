@@ -165,7 +165,7 @@ class FPTree:
         return freq_itemsets
 
 
-def fp_growth(db, min_sup, min_conf, ignore_single=False):
+def fp_growth(db, min_sup, min_conf):
     """FP growth algorithm"""
     # get frequent itemsets
     tot_base = len(db)
@@ -176,8 +176,6 @@ def fp_growth(db, min_sup, min_conf, ignore_single=False):
     freq_cnt = utils.count_freq(db, freq_itemsets)
     rules = []
     for itemset in freq_itemsets:
-        if ignore_single and len(itemset) == 1:
-            continue
         rules += gen_rules(
             itemset, freq_cnt[itemset], freq_cnt, min_conf, tot_base)
 
@@ -227,6 +225,5 @@ if __name__ == "__main__":
         print(itemset)
     print("rules {}".format(len(rules)))
     for r in rules:
-        if len(r.B) != 0:
-            print(r)
+        print(r)
     print("========== Test fp_growth finished ==========")

@@ -40,12 +40,16 @@ def get_freq_items(db, sup_cnt, db_freq=1):
                 tra_cnt[item] = db_freq
         item_counter += tra_cnt
 
-    keys = list(item_counter.keys())
-    for key in keys:
-        if item_counter[key] < sup_cnt:
-            del item_counter[key]
+    return counter_above(item_counter, sup_cnt)
 
-    return item_counter
+
+def counter_above(cnt, threshold):
+    keys = list(cnt.keys())
+    for key in keys:
+        if cnt[key] <= threshold:
+            del cnt[key]
+
+    return cnt
 
 
 def count_freq(db, itemsets):
@@ -60,12 +64,15 @@ def count_freq(db, itemsets):
     return sets_cnt
 
 
-def gen_subsets(items, nonempty=True):
+def gen_subsets(items, nonempty=True, proper=True, max_len=None):
     """generate subsets of items
-    :param items: a set
+    :param items: a set of items
+    :param nonempty: require the subset is nonempty
+    :param proper: require the subset is a proper subset
+    :param max_len: specify the max length of the subset
     """
     items = list(items)
-    n = len(items)
+    n = max_len or (len(items)-proper)
     s = 1 if nonempty else 0
     return list(chain.from_iterable(
         [set(c) for c in combinations(items, r)] for r in range(s, n+1)))
@@ -83,7 +90,7 @@ if __name__ == "__main__":
     print("arr: {}, position of {}: {}".format(a, 3, p))
 
     # test gen_subsets
-    s = {1, 2, 3}
+    s = {1, 2, 3, 4}
     ss = gen_subsets(s)
     for sub in ss:
         print(sub)

@@ -3,7 +3,7 @@ import utils
 from association_rule import gen_rules
 
 
-def apriori(db, min_sup, min_conf, ignore_single=False, prune=True):
+def apriori(db, min_sup, min_conf, prune=True):
     """apriori algorithm"""
     # generate frequent itemsets
     tot_tra = len(db)
@@ -19,8 +19,7 @@ def apriori(db, min_sup, min_conf, ignore_single=False, prune=True):
     # generate rules
     rules = []
     freq_itemsets = []
-    s = 1 if ignore_single else 0
-    for k in range(s, len(Lsets)):
+    for k in range(len(Lsets)):
         for (itemset, freq) in Lsets[k]:
             freq_itemsets.append(itemset)
             rules += gen_rules(
@@ -47,10 +46,7 @@ def gen_freq_itemsets(db, sup_cnt, prune=True):
         cand_counter = utils.count_freq(db, cands)
 
         # filtering candidates
-        keys = list(cand_counter.keys())
-        for key in keys:
-            if cand_counter[key] < sup_cnt:
-                del cand_counter[key]
+        cand_counter = utils.counter_above(cand_counter, sup_cnt)
 
         items = list(cand_counter.items())
         cur_Lset = set([item[0] for item in items])
@@ -86,7 +82,7 @@ if __name__ == "__main__":
     import preprocess
     tras = preprocess.process_groceries(
         preprocess.read_csv(
-            './dataset/GroceryStore/Groceries.csv'))[:1000]
+            './dataset/GroceryStore/Groceries.csv'))
 
     # test gen_cand
     print("========== Test gen_cand ==========")
@@ -113,6 +109,5 @@ if __name__ == "__main__":
         print(itemset)
     print("rules {}".format(len(rules)))
     for r in rules:
-        if len(r.B) != 0:
-            print(r)
+        print(r)
     print("========== Test apriori finished ==========")
