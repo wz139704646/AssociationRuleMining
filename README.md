@@ -34,6 +34,39 @@ optional arguments:
   --baseline BASELINE   the baseline method to use (apriori/fp-growth/apriori-no-prune/exhaustive/(other values will conduct no baseline))
 ```
 
+## Experiments
+
+- [x] `python main.py --min-sup 0.008 --min-conf 0.5 > results/result0`
+- [x] `python main.py --min-sup 0.01 --min-conf 0.5 > results/result1`
+- [x] `python main.py --min-sup 0.02 --min-conf 0.5 > results/result2`
+- [x] `mprof run python main.py --min-sup 0.008 --min-conf 0.5 --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.01 --min-conf 0.5 --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.02 --min-conf 0.5 --baseline no -n 1`
+- [x] `python main.py --min-sup 0.008 --min-conf 0.5 --baseline no --algo fp-growth > results/result3`
+- [x] `python main.py --min-sup 0.01 --min-conf 0.5 --baseline no --algo fp-growth > results/result4`
+- [x] `python main.py --min-sup 0.02 --min-conf 0.5 --baseline no --algo fp-growth > results/result5`
+- [x] `mprof run python main.py --min-sup 0.008 --min-conf 0.5 --baseline no -n 1 --algo fp-growth`
+- [x] `mprof run python main.py --min-sup 0.01 --min-conf 0.5 --baseline no -n 1 --algo fp-growth`
+- [x] `mprof run python main.py --min-sup 0.02 --min-conf 0.5 --baseline no -n 1 --algo fp-growth`
+- [x] `mprof run python main.py --min-sup 0.008 --min-conf 0.5 --baseline no -n 1 --algo exhaustive`
+- [x] `mprof run python main.py --min-sup 0.01 --min-conf 0.5 --baseline no -n 1 --algo exhaustive`
+- [x] `mprof run python main.py --min-sup 0.02 --min-conf 0.5 --baseline no -n 1 --algo exhaustive`
+- [x] `python main.py --min-sup 0.1 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 > results/result6`
+- [x] `python main.py --min-sup 0.05 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 > results/result7`
+- [x] `python main.py --min-sup 0.025 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 > results/result8`
+- [x] `mprof run python main.py --min-sup 0.1 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.05 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.025 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --baseline no -n 1`
+- [x] `python main.py --min-sup 0.1 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no > results/result9`
+- [x] `python main.py --min-sup 0.05 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no > results/result10`
+- [x] `python main.py --min-sup 0.025 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no > results/result11`
+- [x] `mprof run python main.py --min-sup 0.1 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.05 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.025 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo fp-growth --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.1 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo exhaustive --baseline no -n 1`
+- [x] `mprof run python main.py --min-sup 0.05 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo exhaustive --baseline no -n 1 --max-len 4`
+- [x] `mprof run python main.py --min-sup 0.025 --min-conf 0.75 --dataset-type unix-usage --dataset-file ./dataset/UNIX_usage/all_users.981115184025 --algo exhaustive --baseline no -n 1 --max-len 5`
+
 ## Reults
 Grocery Store
 
@@ -44,79 +77,68 @@ $ python main.py
 ========== apriori generate rules ==========
 Rule(support 0.0151, confidence 0.5174: {'yogurt', 'tropical fruit'} => frozenset({'whole milk'}))
 Rule(support 0.0101, confidence 0.5824: {'curd', 'yogurt'} => frozenset({'whole milk'}))
+Rule(support 0.0122, confidence 0.5021: {'rolls/buns', 'root vegetables'} => frozenset({'other vegetables'}))
 Rule(support 0.0123, confidence 0.5845: {'root vegetables', 'tropical fruit'} => frozenset({'other vegetables'}))
-Rule(support 0.0122, confidence 0.5021: {'root vegetables', 'rolls/buns'} => frozenset({'other vegetables'}))
-Rule(support 0.0146, confidence 0.5070: {'whipped/sour cream', 'other vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0146, confidence 0.5070: {'other vegetables', 'whipped/sour cream'} => frozenset({'whole milk'}))
 Rule(support 0.0120, confidence 0.5700: {'root vegetables', 'tropical fruit'} => frozenset({'whole milk'}))
-Rule(support 0.0145, confidence 0.5630: {'root vegetables', 'yogurt'} => frozenset({'whole milk'}))
-Rule(support 0.0127, confidence 0.5230: {'root vegetables', 'rolls/buns'} => frozenset({'whole milk'}))
-Rule(support 0.0104, confidence 0.5862: {'root vegetables', 'citrus fruit'} => frozenset({'other vegetables'}))
+Rule(support 0.0145, confidence 0.5630: {'yogurt', 'root vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0127, confidence 0.5230: {'rolls/buns', 'root vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0104, confidence 0.5862: {'citrus fruit', 'root vegetables'} => frozenset({'other vegetables'}))
 Rule(support 0.0123, confidence 0.5525: {'domestic eggs', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0135, confidence 0.5175: {'pip fruit', 'other vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0135, confidence 0.5175: {'other vegetables', 'pip fruit'} => frozenset({'whole milk'}))
 Rule(support 0.0223, confidence 0.5129: {'yogurt', 'other vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0115, confidence 0.5736: {'other vegetables', 'butter'} => frozenset({'whole milk'}))
 Rule(support 0.0109, confidence 0.5245: {'yogurt', 'whipped/sour cream'} => frozenset({'whole milk'}))
-Rule(support 0.0115, confidence 0.5736: {'butter', 'other vegetables'} => frozenset({'whole milk'}))
 ========== baseline generate rules ==========
 Rule(support 0.0151, confidence 0.5174: {'yogurt', 'tropical fruit'} => frozenset({'whole milk'}))
 Rule(support 0.0101, confidence 0.5824: {'curd', 'yogurt'} => frozenset({'whole milk'}))
 Rule(support 0.0123, confidence 0.5845: {'root vegetables', 'tropical fruit'} => frozenset({'other vegetables'}))
-Rule(support 0.0122, confidence 0.5021: {'root vegetables', 'rolls/buns'} => frozenset({'other vegetables'}))
-Rule(support 0.0146, confidence 0.5070: {'whipped/sour cream', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0145, confidence 0.5630: {'root vegetables', 'yogurt'} => frozenset({'whole milk'}))
+Rule(support 0.0122, confidence 0.5021: {'rolls/buns', 'root vegetables'} => frozenset({'other vegetables'}))
+Rule(support 0.0146, confidence 0.5070: {'other vegetables', 'whipped/sour cream'} => frozenset({'whole milk'}))
+Rule(support 0.0145, confidence 0.5630: {'yogurt', 'root vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0120, confidence 0.5700: {'root vegetables', 'tropical fruit'} => frozenset({'whole milk'}))
-Rule(support 0.0127, confidence 0.5230: {'root vegetables', 'rolls/buns'} => frozenset({'whole milk'}))
+Rule(support 0.0127, confidence 0.5230: {'rolls/buns', 'root vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0104, confidence 0.5862: {'citrus fruit', 'root vegetables'} => frozenset({'other vegetables'}))
 Rule(support 0.0123, confidence 0.5525: {'domestic eggs', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0135, confidence 0.5175: {'pip fruit', 'other vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0135, confidence 0.5175: {'other vegetables', 'pip fruit'} => frozenset({'whole milk'}))
 Rule(support 0.0223, confidence 0.5129: {'yogurt', 'other vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0109, confidence 0.5245: {'yogurt', 'whipped/sour cream'} => frozenset({'whole milk'}))
-Rule(support 0.0115, confidence 0.5736: {'butter', 'other vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0115, confidence 0.5736: {'other vegetables', 'butter'} => frozenset({'whole milk'}))
 ========== Summary ==========
-apriori time elapsed (5 times mean): 3.5393945217132567
+apriori time elapsed (5 times mean): 3.624164915084839
 apriori generated frequent itemsets number: 333
-baseline exhaustive time elapsed (5 times mean): 72.31740670204162
+apriori generated rules number: 14
+apriori generated frequent itemsets max length: 3
+baseline exhaustive time elapsed (5 times mean): 72.81702527999877
 baseline exhaustive generated frequent itemsets number: 333
+baseline exhaustive generated rules number: 14
+baseline exhaustive generated frequent itemsets max length: 3
 ```
 
 FP-growth:
 
 
 ```cmd
-$ python main.py --algo fp-growth
+$ python main.py --algo fp-growth --baseline no
 
 ========== fp-growth generate rules ==========
 Rule(support 0.0101, confidence 0.5824: {'yogurt', 'curd'} => frozenset({'whole milk'}))
 Rule(support 0.0115, confidence 0.5736: {'butter', 'other vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0123, confidence 0.5525: {'domestic eggs', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0109, confidence 0.5245: {'yogurt', 'whipped/sour cream'} => frozenset({'whole milk'}))
+Rule(support 0.0109, confidence 0.5245: {'whipped/sour cream', 'yogurt'} => frozenset({'whole milk'}))
 Rule(support 0.0146, confidence 0.5070: {'whipped/sour cream', 'other vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0135, confidence 0.5175: {'pip fruit', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0104, confidence 0.5862: {'citrus fruit', 'root vegetables'} => frozenset({'other vegetables'}))
-Rule(support 0.0120, confidence 0.5700: {'root vegetables', 'tropical fruit'} => frozenset({'whole milk'}))
-Rule(support 0.0123, confidence 0.5845: {'root vegetables', 'tropical fruit'} => frozenset({'other vegetables'}))
-Rule(support 0.0151, confidence 0.5174: {'yogurt', 'tropical fruit'} => frozenset({'whole milk'}))
+Rule(support 0.0104, confidence 0.5862: {'root vegetables', 'citrus fruit'} => frozenset({'other vegetables'}))
+Rule(support 0.0120, confidence 0.5700: {'tropical fruit', 'root vegetables'} => frozenset({'whole milk'}))
+Rule(support 0.0123, confidence 0.5845: {'tropical fruit', 'root vegetables'} => frozenset({'other vegetables'}))
+Rule(support 0.0151, confidence 0.5174: {'tropical fruit', 'yogurt'} => frozenset({'whole milk'}))
 Rule(support 0.0122, confidence 0.5021: {'rolls/buns', 'root vegetables'} => frozenset({'other vegetables'}))
 Rule(support 0.0127, confidence 0.5230: {'rolls/buns', 'root vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0145, confidence 0.5630: {'yogurt', 'root vegetables'} => frozenset({'whole milk'}))
 Rule(support 0.0223, confidence 0.5129: {'yogurt', 'other vegetables'} => frozenset({'whole milk'}))
-========== baseline generate rules ==========
-Rule(support 0.0151, confidence 0.5174: {'yogurt', 'tropical fruit'} => frozenset({'whole milk'}))
-Rule(support 0.0101, confidence 0.5824: {'yogurt', 'curd'} => frozenset({'whole milk'}))
-Rule(support 0.0123, confidence 0.5845: {'root vegetables', 'tropical fruit'} => frozenset({'other vegetables'}))
-Rule(support 0.0122, confidence 0.5021: {'rolls/buns', 'root vegetables'} => frozenset({'other vegetables'}))
-Rule(support 0.0146, confidence 0.5070: {'whipped/sour cream', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0145, confidence 0.5630: {'yogurt', 'root vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0120, confidence 0.5700: {'root vegetables', 'tropical fruit'} => frozenset({'whole milk'}))
-Rule(support 0.0127, confidence 0.5230: {'rolls/buns', 'root vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0104, confidence 0.5862: {'citrus fruit', 'root vegetables'} => frozenset({'other vegetables'}))
-Rule(support 0.0123, confidence 0.5525: {'domestic eggs', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0135, confidence 0.5175: {'pip fruit', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0223, confidence 0.5129: {'yogurt', 'other vegetables'} => frozenset({'whole milk'}))
-Rule(support 0.0109, confidence 0.5245: {'yogurt', 'whipped/sour cream'} => frozenset({'whole milk'}))
-Rule(support 0.0115, confidence 0.5736: {'butter', 'other vegetables'} => frozenset({'whole milk'}))
 ========== Summary ==========
-fp-growth time elapsed (5 times mean): 0.968793535232544
+fp-growth time elapsed (5 times mean): 0.8856001377105713
 fp-growth generated frequent itemsets number: 333
-baseline exhaustive time elapsed (5 times mean): 74.13179950714111
-baseline exhaustive generated frequent itemsets number: 333
+fp-growth generated rules number: 14
+fp-growth generated frequent itemsets max length: 3
 ```

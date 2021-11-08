@@ -135,4 +135,4 @@ dmypy.json
 imgs/
 
 # results
-results/
+results/*
