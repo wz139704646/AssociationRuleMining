@@ -1,5 +1,39 @@
 # Association Rule Mining
 
+## Codes
+
+主要文件如下：
+
+- apriori.py 中主要包含了 apriori 算法的核心过程，算法的入口为函数 `apriori` .
+- fp_growth.py 中主要包含了 FP-Growth 算法的核心过程以及数据结构，算法的入口函数为 `fp_growth`.
+- dummy.py 中主要包含了额外的 baseline 方法，目前实现了暴力搜索频繁项集的方法（入口为 `exhaustive_search`）。
+- utils.py 中包含了一些在各算法中可复用的工具函数。
+- association_rule.py 中定义了关联规则的数据类 (`Rule`)，并提供了从频繁项集中生成强关联规则的函数 `gen_rules` .
+- statistics.ipynb 中主要对数据集的一些统计指标进行了分析。
+
+## Usage
+```cmd
+$ python main.py --help
+
+usage: main.py [-h] [--algo ALGO] [--dataset-file DATASET_FILE] [--dataset-type DATASET_TYPE] [--cmd-only] [--min-sup MIN_SUP] [--min-conf MIN_CONF] [-n N]
+               [--baseline BASELINE]
+
+Association Rule Mining via Apriori algo. and FP-growth algo.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --algo ALGO           association rule mining algorithm to use(apriori/fp-growth/apriori-no-prune/(other values will conduct apriori))
+  --dataset-file DATASET_FILE
+                        the dataset file to use
+  --dataset-type DATASET_TYPE
+                        the dataset type (grocery-store/unix-usage)
+  --cmd-only            only keep the cmd names for unix usage dataset
+  --min-sup MIN_SUP     the minimal support level to satisfy
+  --min-conf MIN_CONF   the minimal confidence to satisfy
+  -n N                  run the experiment for n times and get summary by their mean
+  --baseline BASELINE   the baseline method to use (apriori/fp-growth/apriori-no-prune/exhaustive/(other values will conduct no baseline))
+```
+
 ## Reults
 Grocery Store
 

@@ -26,7 +26,7 @@ def process_groceries(raw_data, no_repeat=True):
 
 def read_sessions(filepath):
     with open(filepath, encoding='utf-8') as f:
-        return [r.strip() for r in f.readlines() if r != '`']
+        return [r.strip() for r in f.readlines()]
 
 
 # CMD = 0

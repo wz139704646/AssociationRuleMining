@@ -133,3 +133,6 @@ dmypy.json
 
 # imgs
 imgs/
+
+# results
+results/

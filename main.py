@@ -13,7 +13,7 @@ def parse_args():
 
     parser.add_argument('--algo', type=str, default='apriori',
                         help='association rule mining algorithm to use'
-                        '(apriori/fp-growth/apriori-no-prune/(other values will conduct apriori))')
+                        '(apriori/fp-growth/apriori-no-prune/exhaustive(other values will conduct apriori))')
     parser.add_argument('--dataset-file', type=str, default='./dataset/GroceryStore/Groceries.csv',
                         help='the dataset file to use')
     parser.add_argument('--dataset-type', type=str, default='grocery-store',
@@ -29,6 +29,9 @@ def parse_args():
     parser.add_argument('--baseline', type=str, default='exhaustive',
                         help='the baseline method to use '
                         '(apriori/fp-growth/apriori-no-prune/exhaustive/(other values will conduct no baseline))')
+    parser.add_argument('--max-len', type=int, default=3,
+                        help='the max len of frequent itemsets searched in exhaustive method'
+                        '(used when "exhaustive" specified as algo to test)')
 
     return parser.parse_args()
 
@@ -42,12 +45,16 @@ methods = {
             fp_growth(db, min_sup, min_conf),
     'apriori-no-prune':\
         lambda db, min_sup, min_conf:\
-            apriori(db, min_sup, min_conf, prune=False),
+            apriori(db, min_sup, min_conf, prune=False)
 }
 
 
 def main():
     args = parse_args()
+
+    # init max len of exhaustive search in methods
+    methods['exhaustive'] = lambda db, min_sup, min_conf:\
+        exhaustive_search(db, min_sup, min_conf, max_len=args.max_len)
 
     if args.dataset_type == 'grocery-store':
         # grocery store data
@@ -66,13 +73,15 @@ def main():
     for _ in range(args.n):
         rules, freq_itemsets = algo(db, args.min_sup, args.min_conf)
     et = time.time()
-    summary[args.algo+' time elapsed ({} times mean)'.format(args.n)] = (et-st) / args.n
-    summary[args.algo+' generated frequent itemsets number'] = len(freq_itemsets)
-
-    # add truncated exhaustive search to methods
     max_len = 0
     for itemset in freq_itemsets:
         max_len = max(max_len, len(itemset))
+    summary[args.algo+' time elapsed ({} times mean)'.format(args.n)] = (et-st) / args.n
+    summary[args.algo+' generated frequent itemsets number'] = len(freq_itemsets)
+    summary[args.algo+' generated rules number'] = len(rules)
+    summary[args.algo+' generated frequent itemsets max length'] = max_len
+
+    # modify truncated exhaustive search in methods
     methods['exhaustive'] = lambda db, min_sup, min_conf:\
         exhaustive_search(db, min_sup, min_conf, max_len=max_len)
 
@@ -83,10 +92,19 @@ def main():
             baseline_rules, baseline_freq_itemsets = methods[args.baseline](
                 db, args.min_sup, args.min_conf)
         et = time.time()
+
+        baseline_max_len = 0
+        for itemset in freq_itemsets:
+            baseline_max_len = max(max_len, len(itemset))
+
         summary['baseline {} time elapsed ({} times mean)'.format(args.baseline, args.n)]\
             = (et-st) / args.n
         summary['baseline {} generated frequent itemsets number'.format(args.baseline)]\
             = len(baseline_freq_itemsets)
+        summary['baseline {} generated rules number'.format(args.baseline)]\
+            = len(baseline_rules)
+        summary['baseline {} generated frequent itemsets max length'.format(args.baseline)]\
+            = baseline_max_len
 
     # show rules
     print('========== {} generate rules =========='.format(args.algo))
