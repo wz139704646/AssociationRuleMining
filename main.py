@@ -66,10 +66,10 @@ def main():
 
     summary = {}
     # run algo
-    st = time.time()
     if args.algo not in methods:
         args.algo = 'apriori'
     algo = methods[args.algo]
+    st = time.time()
     for _ in range(args.n):
         rules, freq_itemsets = algo(db, args.min_sup, args.min_conf)
     et = time.time()
